@@ -97,7 +97,8 @@ int main() {
 				b[++tot] = t.first;
 			}
 		}
-		for (int i = 1; i <= tot; i++) cout << b[i] << " \n"[i == tot];
+		for (int i = 1; i <= tot; i++) cout << b[i] << (i == tot ? "" : " ");
+		cout << '\n';
 	}
 	return 0;
 }
