@@ -1,0 +1,94 @@
+n-1-2:	(n-1)-1-3
+	      1-2
+	(n-1)-3-2
+n-1-3:	(n-1)-1-3
+	      1-2
+	(n-1)-3-1
+	      2-3
+	(n-1)-1-3
+n-2-1:	(n-1)-2-1
+	      2-3
+	(n-1)-1-2
+	      3-1
+	(n-1)-2-1
+n-2-3:	(n-1)-2-1
+	      2-3
+	(n-1)-1-3
+n-3-1:	(n-1)-3-2
+	      3-1
+	(n-1)-2-1
+n-3-2:	(n-1)-3-2
+	      3-1
+	(n-1)-2-3
+	      1-2
+	(n-1)-3-2
+
+
+#include <iostream>
+#include <vector>
+#define int long long
+#define _mul(__a__, __b__, __c__, i, j) __c__[i][j] = (__a__[i][0] * __b__[0][j] % mod + __a__[i][1] * __b__[1][j] % mod + __a__[i][2] * __b__[2][j] % mod) % mod;
+#define mul(__a__, __b__, __c__) {_mul(__a__, __b__, __c__, 0, 0) _mul(__a__, __b__, __c__, 0, 1) _mul(__a__, __b__, __c__, 0, 2) \
+								  _mul(__a__, __b__, __c__, 1, 0) _mul(__a__, __b__, __c__, 1, 1) _mul(__a__, __b__, __c__, 1, 2) \
+								  _mul(__a__, __b__, __c__, 2, 0) _mul(__a__, __b__, __c__, 2, 1) _mul(__a__, __b__, __c__, 2, 2)}
+#define copy(__source__, __data__)  __data__[0][0] = __source__[0][0], __data__[0][1] = __source__[0][1], __data__[0][2] = __source__[0][2], \
+									__data__[1][0] = __source__[1][0], __data__[1][1] = __source__[1][1], __data__[1][2] = __source__[1][2], \
+									__data__[2][0] = __source__[2][0], __data__[2][1] = __source__[2][1], __data__[2][2] = __source__[2][2];
+
+using namespace std;
+
+constexpr int mt[3][3] = {
+	{0, 2, 1},
+	{1, 2, 2},
+	{0, 0, 1}
+}, one[3][3] = {
+	{1, 0, 0},
+	{0, 1, 0},
+	{0, 0, 1}
+};
+constexpr int mod = 998244353;
+int n, b[3][3], r[3][3], t[3][3];
+
+//void mul(const int a[3][3], const int b[3][3], int c[3][3]) {
+//	for (int i = 0; i < 3; i++)
+//		for (int j = 0; j < 3; j++)
+//			c[i][j] = 0;
+//	for (int i = 0; i < 3; i++)
+//		for (int j = 0; j < 3; j++)
+//			for (int k = 0; k < 3; k++)
+//				c[i][j] = (c[i][j] + a[i][k] * b[k][j] % mod) % mod;
+//}
+
+void quick_power(int power) {
+	copy(mt, b)
+	copy(one, r);
+	while (power) {
+		if (power & 1) {
+			mul(b, r, t);
+			copy(t, r)
+		}
+		mul(b, b, t);
+		copy(t, b)
+		power >>= 1;
+	}
+}
+
+void solve() {
+	cin >> n;
+	quick_power(n - 1);
+	for (int i = 0; i < 3; i++, cout << endl)
+		for (int j = 0; j < 3; j++, cout << ' ')
+			cout << r[i][j];
+	cout << (r[0][0] + 2 * r[0][1] + r[0][2]) % mod << ' ' << (r[1][0] + 2 * r[1][1] + r[1][2]) % mod << ' ' << (r[2][0] + 2 * r[2][1] + r[2][2]) % mod << endl;
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+//	cin.tie(0);
+//	freopen("riemannian.in", "r", stdin);
+//	freopen("riemannian.out", "w", stdout);
+	int T;
+	cin >> T;
+	while (T --> 0) solve();
+	return 0;
+}
